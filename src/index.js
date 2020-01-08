@@ -1,5 +1,5 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Test from './Test'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import Comment from './Comment'
 
-ReactDOM.render(<Test />, document.getElementById('root'));
+ReactDOM.render(<Comment />, document.getElementById('root'));
