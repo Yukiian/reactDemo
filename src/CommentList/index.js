@@ -36,7 +36,7 @@ class CommentList extends Component {
             </div>
          );
     };
-    delate(index){
+    delate(index){ //删除
        this.props.delate(index);
     }
 }

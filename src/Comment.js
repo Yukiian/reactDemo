@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Userform from './Userform/index';
 import CommentList from './CommentList/index'
+import UserList from './UserList/index'
 import  './Comment.less'
 import {getStorage,setStorage} from './utils/storage'
 
@@ -11,16 +12,25 @@ class Comment extends Component {
             userName:"",
             content:"",
             commitTime:"",
-            list:[]
+            list:[],
+            userList:[{name:"yuki.tian",email:"564417296@qq.com"},
+                        {name:"rose",email:"564417296@qq.com"}]
           };
+          this._timer=null;
           this.release=this.release.bind(this);
           this.delate=this.delate.bind(this);
+          this.clickName=this.clickName.bind(this);
     }
     render() { 
         return ( 
             <div className={'wrapper'}>
-                <div><Userform  ref="userForm"  release={this.release} userName={this.state.userName}/></div>
-                <div style={{marginTop:"10px"}}><CommentList timeChangeList={this.state.timeChangeList} list={this.state.list} delate={this.delate}/></div>
+                <div className="userList">
+                    <UserList userList={this.state.userList} clickName={this.clickName}/>
+                </div>
+                <div >
+                    <div><Userform  ref="userForm"  release={this.release} userName={this.state.userName}/></div>
+                    <div style={{marginTop:"10px"}}><CommentList timeChangeList={this.state.timeChangeList} list={this.state.list} delate={this.delate}/></div>
+                </div>
             </div>
          );
     };
@@ -29,14 +39,16 @@ class Comment extends Component {
        if(list){
            this.setState({list:JSON.parse(list)})
        }
-       setInterval(() => {
+       this._timer=setInterval(() => {
            const {userName,content,commitTime,list} = this.state;
            this.setState({
             userName,content,commitTime,list
            })
        }, 5000);
-    }
-    
+    };
+    componentWillUnmount () {
+        clearInterval(this._timer)
+      }
 
     userNameChange(e) {
         this.setState({
@@ -72,12 +84,17 @@ class Comment extends Component {
         })
 
     };
+
     delate(index){
         const list= this.state.list;
         list.splice(index,1);
         this.setState({list})
         setStorage('list',JSON.stringify(list))
         // console.log(list);
+    };
+
+    clickName(name){
+        this.refs.userForm.setFieldsValue({"content":`@${name}：`})
     }
 }
  
